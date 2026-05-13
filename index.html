@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS2 Lineups | Pro Tactics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#eab308', // CS2 Gold
+                        darkbg: '#0b0f19',
+                        cardbg: '#111827',
+                        cardborder: '#1f2937'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+        
+        .glass-nav {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .hover-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.1), 0 8px 10px -6px rgba(234, 179, 8, 0.1);
+            border-color: #eab308;
+        }
+
+        /* Styles für das Video-Modal */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        /* Map Content Logic */
+        .map-section {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        .map-section.active {
+            display: grid;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-300 font-sans antialiased min-h-screen flex flex-col selection:bg-brand selection:text-black">
+
+    <!-- Navigation -->
+    <nav class="glass-nav fixed w-full z-50 border-b border-gray-800 top-0 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo (Klick führt zur Startseite) -->
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="switchView('home')">
+                    <div class="w-8 h-8 bg-brand rounded-md flex items-center justify-center text-black font-bold text-xl group-hover:bg-yellow-400 transition-colors">
+                        CS
+                    </div>
+                    <span class="text-white font-bold text-xl tracking-wide hidden sm:block group-hover:text-gray-200 transition-colors">Tactic<span class="text-brand">Board</span></span>
+                </div>
+
+                <!-- Map Switcher Navigation (Versteckt auf Startseite) -->
+                <div id="map-nav-container" class="hidden overflow-x-auto no-scrollbar gap-2 sm:gap-4 pb-1 sm:pb-0">
+                    <button class="map-btn active-tab text-brand px-3 py-2 rounded-md text-sm font-medium border-b-2 border-brand whitespace-nowrap" data-target="mirage">Mirage</button>
+                    <button class="map-btn text-gray-400 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap border-b-2 border-transparent" data-target="dust2">Dust 2</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== VIEW: HOME (INTRO PAGE) ==================== -->
+    <div id="view-home" class="flex-grow flex flex-col justify-center w-full pt-24 pb-12 px-4">
+        <div class="text-center max-w-3xl mx-auto mb-16 relative">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-brand/20 blur-[100px] rounded-full pointer-events-none"></div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight relative z-10">
+                Master your <span class="text-brand">Utility</span>
+            </h1>
+            <p class="text-lg text-gray-400 relative z-10">
+                Wähle eine Kategorie, um die wichtigsten Lineups für dein nächstes Match zu lernen.
+            </p>
+        </div>
+
+        <!-- Kategorie Grid -->
+        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 w-full relative z-10">
+            <!-- Smokes Card -->
+            <div onclick="switchView('smokes')" class="hover-card bg-cardbg border border-cardborder rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer group text-center h-64">
+                <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2">Smokes</h2>
+                <p class="text-sm text-gray-400">Essentielle Map-Control Setups.</p>
+            </div>
+
+            <!-- Flashes Card (Coming Soon) -->
+            <div class="bg-cardbg/50 border border-cardborder rounded-2xl p-8 flex flex-col items-center justify-center cursor-not-allowed text-center h-64 relative overflow-hidden">
+                <div class="absolute inset-0 bg-black/40 z-10"></div>
+                <div class="absolute top-4 right-4 bg-gray-800 text-xs text-gray-400 px-2 py-1 rounded z-20 font-bold border border-gray-700">Soon</div>
+                <div class="w-16 h-16 bg-gray-800/50 rounded-full flex items-center justify-center mb-4 relative z-0">
+                    <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-500 mb-2 relative z-0">Pop Flashes</h2>
+            </div>
+
+            <!-- Molotovs Card (Coming Soon) -->
+            <div class="bg-cardbg/50 border border-cardborder rounded-2xl p-8 flex flex-col items-center justify-center cursor-not-allowed text-center h-64 relative overflow-hidden">
+                <div class="absolute inset-0 bg-black/40 z-10"></div>
+                <div class="absolute top-4 right-4 bg-gray-800 text-xs text-gray-400 px-2 py-1 rounded z-20 font-bold border border-gray-700">Soon</div>
+                <div class="w-16 h-16 bg-gray-800/50 rounded-full flex items-center justify-center mb-4 relative z-0">
+                    <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-500 mb-2 relative z-0">Molotovs</h2>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================== VIEW: SMOKES ==================== -->
+    <div id="view-smokes" class="hidden flex-col w-full">
+        <!-- Hero Section -->
+        <header class="pt-32 pb-12 text-center px-4 relative overflow-hidden">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-brand/10 blur-[100px] rounded-full pointer-events-none"></div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
+                Essential <span class="text-brand" id="hero-map-name">Mirage</span> Smokes
+            </h1>
+            <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                Klicke auf eine Karte, um das Tutorial-Video im Overlay zu öffnen.
+            </p>
+        </header>
+
+        <!-- Content Area Maps -->
+        <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 w-full">
+            
+            <!-- ====== MIRAGE ====== -->
+            <div id="mirage" class="map-section grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 active">
+                <article class="hover-card bg-cardbg border border-cardborder rounded-xl overflow-hidden flex flex-col cursor-pointer" onclick="openVideoModal('mirage_window.mp4', 'Mirage: Window Smoke', 'poster_mirage_window.jpg')">
+                    <div class="aspect-video bg-gray-800 relative flex items-center justify-center group">
+                        <img src="poster_mirage_window.jpg" onerror="this.src='https://placehold.co/600x400/1f2937/eab308?text=Window'" alt="Thumbnail Window" class="object-cover w-full h-full opacity-50 group-hover:opacity-80 transition-opacity">
+                        <div class="absolute w-12 h-12 bg-brand/90 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6 text-black ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-grow">
+                        <h2 class="text-xl font-bold text-white mb-1">Window (Mid)</h2>
+                        <p class="text-sm text-gray-400 mb-3">T-Spawn</p>
+                        <span class="text-xs font-semibold bg-brand/10 text-brand px-2 py-1 rounded border border-brand/20">W-Jumpthrow</span>
+                    </div>
+                </article>
+
+                <article class="hover-card bg-cardbg border border-cardborder rounded-xl overflow-hidden flex flex-col cursor-pointer" onclick="openVideoModal('mirage_ct.mp4', 'Mirage: CT Ticket Smoke', 'poster_mirage_ct.jpg')">
+                    <div class="aspect-video bg-gray-800 relative flex items-center justify-center group">
+                        <img src="poster_mirage_ct.jpg" onerror="this.src='https://placehold.co/600x400/1f2937/eab308?text=CT'" alt="Thumbnail CT" class="object-cover w-full h-full opacity-50 group-hover:opacity-80 transition-opacity">
+                        <div class="absolute w-12 h-12 bg-brand/90 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6 text-black ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-grow">
+                        <h2 class="text-xl font-bold text-white mb-1">CT Ticket</h2>
+                        <p class="text-sm text-gray-400 mb-3">Tetris</p>
+                        <span class="text-xs font-semibold bg-gray-800 text-gray-300 px-2 py-1 rounded border border-gray-700">Left Click</span>
+                    </div>
+                </article>
+
+                <article class="hover-card bg-cardbg border border-cardborder rounded-xl overflow-hidden flex flex-col cursor-pointer" onclick="openVideoModal('mirage_connector.mp4', 'Mirage: Connector', 'poster_mirage_connector.jpg')">
+                    <div class="aspect-video bg-gray-800 relative flex items-center justify-center group">
+                        <img src="poster_mirage_connector.jpg" onerror="this.src='https://placehold.co/600x400/1f2937/eab308?text=Connector'" alt="Thumbnail Connector" class="object-cover w-full h-full opacity-50 group-hover:opacity-80 transition-opacity">
+                        <div class="absolute w-12 h-12 bg-brand/90 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6 text-black ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-grow">
+                        <h2 class="text-xl font-bold text-white mb-1">Connector</h2>
+                        <p class="text-sm text-gray-400 mb-3">T-Spawn</p>
+                        <span class="text-xs font-semibold bg-brand/10 text-brand px-2 py-1 rounded border border-brand/20">Jumpthrow</span>
+                    </div>
+                </article>
+            </div>
+
+            <!-- ====== DUST 2 ====== -->
+            <div id="dust2" class="map-section grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <article class="hover-card bg-cardbg border border-cardborder rounded-xl overflow-hidden flex flex-col cursor-pointer" onclick="openVideoModal('dust2_xbox.mp4', 'Dust 2: X-Box Smoke', 'poster_dust2_xbox.jpg')">
+                    <div class="aspect-video bg-gray-800 relative flex items-center justify-center group">
+                        <img src="poster_dust2_xbox.jpg" onerror="this.src='https://placehold.co/600x400/1f2937/eab308?text=X-Box'" alt="Thumbnail X-Box" class="object-cover w-full h-full opacity-50 group-hover:opacity-80 transition-opacity">
+                        <div class="absolute w-12 h-12 bg-brand/90 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6 text-black ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-grow">
+                        <h2 class="text-xl font-bold text-white mb-1">X-Box (Mid)</h2>
+                        <p class="text-sm text-gray-400 mb-3">T-Spawn</p>
+                        <span class="text-xs font-semibold bg-brand/10 text-brand px-2 py-1 rounded border border-brand/20">Jumpthrow</span>
+                    </div>
+                </article>
+                
+                <article class="hover-card bg-cardbg border border-cardborder rounded-xl overflow-hidden flex flex-col cursor-pointer" onclick="openVideoModal('dust2_ct_cross.mp4', 'Dust 2: CT Cross', 'poster_dust2_ct_cross.jpg')">
+                    <div class="aspect-video bg-gray-800 relative flex items-center justify-center group">
+                        <img src="poster_dust2_ct_cross.jpg" onerror="this.src='https://placehold.co/600x400/1f2937/eab308?text=CT+Cross'" alt="Thumbnail CT Cross" class="object-cover w-full h-full opacity-50 group-hover:opacity-80 transition-opacity">
+                        <div class="absolute w-12 h-12 bg-brand/90 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6 text-black ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-grow">
+                        <h2 class="text-xl font-bold text-white mb-1">CT Cross (A Long)</h2>
+                        <p class="text-sm text-gray-400 mb-3">A Long</p>
+                        <span class="text-xs font-semibold bg-gray-800 text-gray-300 px-2 py-1 rounded border border-gray-700">Left Click</span>
+                    </div>
+                </article>
+
+                <article class="hover-card bg-cardbg border border-cardborder rounded-xl overflow-hidden flex flex-col cursor-pointer" onclick="openVideoModal('dust2_b_doors.mp4', 'Dust 2: B Doors / Window', 'poster_dust2_doors.jpg')">
+                    <div class="aspect-video bg-gray-800 relative flex items-center justify-center group">
+                        <img src="poster_dust2_doors.jpg" onerror="this.src='https://placehold.co/600x400/1f2937/eab308?text=B+Doors'" alt="Thumbnail B Doors" class="object-cover w-full h-full opacity-50 group-hover:opacity-80 transition-opacity">
+                        <div class="absolute w-12 h-12 bg-brand/90 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6 text-black ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-grow">
+                        <h2 class="text-xl font-bold text-white mb-1">B Doors / Window</h2>
+                        <p class="text-sm text-gray-400 mb-3">Upper Tunnels</p>
+                        <span class="text-xs font-semibold bg-gray-800 text-gray-300 px-2 py-1 rounded border border-gray-700">Left Click</span>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <!-- Video Modal / Overlay -->
+    <div id="videoModal" class="modal fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4">
+        <div class="absolute inset-0" onclick="closeVideoModal()"></div>
+        <div class="modal-content relative bg-cardbg border border-cardborder rounded-2xl w-auto max-w-[95vw] shadow-2xl overflow-hidden z-10 flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b border-gray-800 bg-gray-900/50">
+                <h3 id="modalTitle" class="text-xl font-bold text-white">Lineup Video</h3>
+                <button onclick="closeVideoModal()" class="text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="w-full bg-black flex items-center justify-center relative">
+                <div class="absolute text-gray-500 text-sm text-center px-4 pointer-events-none">
+                    Bitte lege das Video in denselben Ordner.<br>
+                    Erwarteter Name: <span id="expectedFilename" class="text-brand font-mono"></span>
+                </div>
+                
+                <video id="lineupPlayer" class="w-full sm:max-w-[80vw] max-h-[80vh] object-contain relative z-10 block" controls autoplay loop muted playsinline poster="">
+                    <source id="videoSource" src="" type="video/mp4">
+                    Dein Browser unterstützt das Video-Tag nicht.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logik -->
+    <script>
+        // --- View Switcher Logik (Home <-> Smokes) ---
+        function switchView(view) {
+            const viewHome = document.getElementById('view-home');
+            const viewSmokes = document.getElementById('view-smokes');
+            const mapNavContainer = document.getElementById('map-nav-container');
+
+            if(view === 'home') {
+                viewHome.classList.remove('hidden');
+                viewHome.classList.add('flex');
+                
+                viewSmokes.classList.add('hidden');
+                viewSmokes.classList.remove('flex');
+                
+                // Verstecke die Map-Navigation oben
+                mapNavContainer.classList.add('hidden');
+                mapNavContainer.classList.remove('flex');
+            } else if(view === 'smokes') {
+                viewHome.classList.add('hidden');
+                viewHome.classList.remove('flex');
+                
+                viewSmokes.classList.remove('hidden');
+                viewSmokes.classList.add('flex');
+                
+                // Zeige Map-Navigation und klicke virtuell auf Mirage (Reset)
+                mapNavContainer.classList.remove('hidden');
+                mapNavContainer.classList.add('flex');
+                document.querySelector('.map-btn[data-target="mirage"]').click();
+            }
+        }
+
+        // --- Map Switcher Logik (Mirage <-> Dust 2) ---
+        const mapButtons = document.querySelectorAll('.map-btn');
+        const mapSections = document.querySelectorAll('.map-section');
+        const heroMapName = document.getElementById('hero-map-name');
+
+        mapButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Style Reset für Buttons
+                mapButtons.forEach(b => {
+                    b.classList.remove('text-brand', 'border-brand');
+                    b.classList.add('text-gray-400', 'border-transparent');
+                });
+                
+                // Active Style
+                btn.classList.remove('text-gray-400', 'border-transparent');
+                btn.classList.add('text-brand', 'border-brand');
+
+                // Hero Text ändern
+                const targetMap = btn.getAttribute('data-target');
+                if (targetMap === 'dust2') {
+                    heroMapName.textContent = 'Dust 2';
+                } else {
+                    heroMapName.textContent = targetMap.charAt(0).toUpperCase() + targetMap.slice(1);
+                }
+
+                // Map Sections umschalten
+                mapSections.forEach(sec => {
+                    sec.classList.remove('active');
+                    if(sec.id === targetMap) {
+                        sec.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // --- Video Modal Logik ---
+        const modal = document.getElementById('videoModal');
+        const player = document.getElementById('lineupPlayer');
+        const source = document.getElementById('videoSource');
+        const modalTitle = document.getElementById('modalTitle');
+        const expectedFilename = document.getElementById('expectedFilename');
+
+        function openVideoModal(videoFilename, title, posterImage) {
+            modalTitle.textContent = title;
+            expectedFilename.textContent = videoFilename;
+            player.poster = posterImage || '';
+            source.src = videoFilename;
+            player.load(); 
+            
+            let playPromise = player.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Video noch nicht vorhanden.");
+                });
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeVideoModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                player.pause();
+                source.src = ''; 
+                player.poster = ''; 
+            }, 300); 
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeVideoModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
